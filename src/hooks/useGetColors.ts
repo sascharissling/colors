@@ -16,9 +16,7 @@ export function useGetColors(filter: string) {
       .then((response) => {
         if (!response.ok) {
           console.error("Error fetching colors");
-          setError(true);
         }
-        setLoading(false);
         return response.json();
       })
       .then((data) =>
@@ -26,7 +24,12 @@ export function useGetColors(filter: string) {
           // only return colors with an actual hex code, because random values are being pushed to the api
           data.filter((color: ColorType) => /^#[0-9A-F]{6}$/i.test(color.hex))
         )
-      );
+      )
+      .then(() => setLoading(false))
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+      });
   }, []);
 
   const filteredColors = useMemo(() => {
