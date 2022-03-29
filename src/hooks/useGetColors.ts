@@ -8,14 +8,14 @@ export type ColorType = {
 
 export function useGetColors(filter: string) {
   const [colors, setColors] = useState<ColorType[]>();
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`https://api.sampleapis.com/csscolornames/colors`)
       .then((response) => {
         if (!response.ok) {
-          console.error("Error fetching colors");
+          throw new Error("Error fetching colors");
         }
         return response.json();
       })
@@ -27,11 +27,11 @@ export function useGetColors(filter: string) {
       )
       .then(() => setLoading(false))
       .catch((error) => {
-        console.error(error);
-        setError(true);
+        setError(error);
       });
   }, []);
 
+  // useMemo to ensure stable reference to filteredColors
   const filteredColors = useMemo(() => {
     return filter === ""
       ? colors
