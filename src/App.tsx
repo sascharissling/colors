@@ -108,7 +108,7 @@ export default function App() {
         </LoadingWrapper>
       ) : (
         <>
-          <Label>search for colors here</Label>
+          <Label htmlFor="color-filter">search for colors here</Label>
           <InputWrapper>
             <Input
               value={filter}
